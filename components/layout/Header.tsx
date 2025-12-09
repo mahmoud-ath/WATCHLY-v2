@@ -4,7 +4,6 @@ import { Film, Home, Bookmark, Gamepad2, Sparkles, Coffee, Share2, Palette, Chec
 import toast from 'react-hot-toast';
 import { useTheme } from '../../contexts/ThemeContext';
 import { ColorTheme } from '../../types/theme';
-import '../../public/logo.svg';
 
 const Header: React.FC = () => {
   const location = useLocation();
