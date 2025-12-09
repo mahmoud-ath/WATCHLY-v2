@@ -143,7 +143,7 @@ const Footer: React.FC = () => {
             <div className="flex items-center gap-2 text-sm text-slate-400">
               <span>Made with</span>
               <Heart className="w-4 h-4 text-pink-500 fill-pink-500 animate-pulse" />
-              <span>by the Watchly Team</span>
+              <span>by mahmoud-ath</span>
             </div>
           </div>
         </div>
