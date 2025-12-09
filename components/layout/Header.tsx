@@ -4,6 +4,7 @@ import { Film, Home, Bookmark, Gamepad2, Sparkles, Coffee, Share2, Palette, Chec
 import toast from 'react-hot-toast';
 import { useTheme } from '../../contexts/ThemeContext';
 import { ColorTheme } from '../../types/theme';
+import '../../public/logo.svg';
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -53,7 +54,7 @@ const Header: React.FC = () => {
         {/* Logo Section */}
         <Link to="/" className="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition-opacity">
           <div className={`relative ${themeClasses.button} p-2 md:p-2.5 rounded-xl shadow-lg`}>
-            <Film className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                  <Film className="w-6 h-6 text-white" />
           </div>
           <h1 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
             Watchly AI

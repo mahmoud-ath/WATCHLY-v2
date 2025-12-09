@@ -16,7 +16,6 @@ const Footer: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className={`absolute inset-0 ${themeClasses.button} rounded-xl blur-lg opacity-50`} />
                 <div className={`relative ${themeClasses.button} p-2.5 rounded-xl shadow-lg`}>
                   <Film className="w-6 h-6 text-white" />
                 </div>
