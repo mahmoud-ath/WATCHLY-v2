@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Movie, MovieDetails } from '../types';
-import { fetchMovieDetails } from '../services/geminiService';
+import { fetchMovieDetails } from '../services/movieService';
 import { XIcon, StarIcon, ClockIcon, FilmIcon } from './Icons';
 
 interface MovieDetailModalProps {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchMovies } from '../services/geminiService';
+import { fetchMovies } from '../services/movieService';
 import { 
   fetchTrending,
   fetchTopRatedMovies, 
