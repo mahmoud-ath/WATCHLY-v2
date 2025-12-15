@@ -18,7 +18,7 @@ Your all-in-one hub for movies & TV. Search millions of titles, save your watchl
 
 ## 📸 Screenshots
 
-<div align="center">
+<div >
 
 ### 🖼️ App Gallery
 
