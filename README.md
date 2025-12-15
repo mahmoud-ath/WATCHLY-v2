@@ -16,13 +16,7 @@ Your all-in-one hub for movies & TV. Search millions of titles, save your watchl
 
 ---
 
-## 📸 Screenshots
-
-<div >
-
 ### 🖼️ App Gallery
-
-## 📸 Screenshots Overview
 
 - **Home + Recommendations:**
   
