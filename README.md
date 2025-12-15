@@ -1,3 +1,6 @@
+
+
+
 <div align="center">
 
 # 🎬 Watchly AI
@@ -19,127 +22,28 @@ Your all-in-one hub for movies & TV. Search millions of titles, save your watchl
 
 ### 🖼️ App Gallery
 
-## 📸 Screenshots
+## 📸 Screenshots Overview
 
-<div align="center">
+- **Home + Recommendations:**
   
-### **Click any screenshot to view full resolution**
+   ![Watchly Overview 1](Screenshots/overview-1.png)
 
-<div style="display: flex; overflow-x: auto; gap: 20px; padding: 20px 0; scrollbar-width: thin; -webkit-overflow-scrolling: touch;">
+- **Details + Quiz Game:**
   
-  <div style="text-align: center; flex-shrink: 0;">
-    <a href="Screenshots/home page.png" target="_blank" style="text-decoration: none;">
-      <img src="Screenshots/home page.png" alt="Home Page - Interactive Hero Carousel" 
-           width="280" 
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e1e4e8; 
-                  transition: all 0.3s ease; object-fit: cover; height: 500px;"
-           onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'"
-           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'">
-    </a>
-    <p style="margin-top: 12px; font-weight: 500; color: #333;">Home Page</p>
-    <p style="margin-top: 4px; font-size: 0.85em; color: #666; max-width: 280px;">Interactive hero carousel with trending content</p>
-  </div>
-  
-  <div style="text-align: center; flex-shrink: 0;">
-    <a href="Screenshots/moviedetails.png" target="_blank" style="text-decoration: none;">
-      <img src="Screenshots/moviedetails.png" alt="Movie Details - Comprehensive Information" 
-           width="280" 
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e1e4e8;
-                  transition: all 0.3s ease; object-fit: cover; height: 500px;"
-           onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'"
-           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'">
-    </a>
-    <p style="margin-top: 12px; font-weight: 500; color: #333;">Movie Details</p>
-    <p style="margin-top: 4px; font-size: 0.85em; color: #666; max-width: 280px;">Complete movie info with cast, trailers & recommendations</p>
-  </div>
-  
-  <div style="text-align: center; flex-shrink: 0;">
-    <a href="Screenshots/watchlist.png" target="_blank" style="text-decoration: none;">
-      <img src="Screenshots/watchlist.png" alt="Watchlist - Personal Collection" 
-           width="280" 
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e1e4e8;
-                  transition: all 0.3s ease; object-fit: cover; height: 500px;"
-           onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'"
-           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'">
-    </a>
-    <p style="margin-top: 12px; font-weight: 500; color: #333;">Watchlist</p>
-    <p style="margin-top: 4px; font-size: 0.85em; color: #666; max-width: 280px;">Personal movie collection management</p>
-  </div>
-  
-  <div style="text-align: center; flex-shrink: 0;">
-    <a href="Screenshots/recomendationspage.png" target="_blank" style="text-decoration: none;">
-      <img src="Screenshots/recomendationspage.png" alt="Smart Recommendations - Advanced Filtering" 
-           width="280" 
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e1e4e8;
-                  transition: all 0.3s ease; object-fit: cover; height: 500px;"
-           onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'"
-           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'">
-    </a>
-    <p style="margin-top: 12px; font-weight: 500; color: #333;">Smart Recommendations</p>
-    <p style="margin-top: 4px; font-size: 0.85em; color: #666; max-width: 280px;">AI-powered suggestions with filtering</p>
-  </div>
-  
-  <div style="text-align: center; flex-shrink: 0;">
-    <a href="Screenshots/gamepage.png" target="_blank" style="text-decoration: none;">
-      <img src="Screenshots/gamepage.png" alt="Interactive Quiz - AI-Generated Questions" 
-           width="280" 
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e1e4e8;
-                  transition: all 0.3s ease; object-fit: cover; height: 500px;"
-           onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'"
-           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'">
-    </a>
-    <p style="margin-top: 12px; font-weight: 500; color: #333;">Interactive Quiz</p>
-    <p style="margin-top: 4px; font-size: 0.85em; color: #666; max-width: 280px;">AI-generated movie guessing game</p>
-  </div>
-  
-  <div style="text-align: center; flex-shrink: 0;">
-    <a href="Screenshots/trending movies.png" target="_blank" style="text-decoration: none;">
-      <img src="Screenshots/trending movies.png" alt="Trending Movies - Weekly Hot Picks" 
-           width="280" 
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e1e4e8;
-                  transition: all 0.3s ease; object-fit: cover; height: 500px;"
-           onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'"
-           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'">
-    </a>
-    <p style="margin-top: 12px; font-weight: 500; color: #333;">Trending Movies</p>
-    <p style="margin-top: 4px; font-size: 0.85em; color: #666; max-width: 280px;">Weekly updated trending picks</p>
-  </div>
-  
-</div>
+   ![Watchly Overview 2](Screenshots/overview-2.png)
 
-<small>✨ <em>Hover for preview • Click for full resolution • Scroll horizontally for more</em></small>
-
-</div>
-
----
-
-## 📋 Screenshot Details
-
-<details>
-<summary><strong>View detailed descriptions of each screen</strong></summary>
-
-| Feature | File | Description | Key Elements |
-|---------|------|-------------|--------------|
-| **Home Page** | `home page.png` | Interactive hero carousel with trending content | • Live carousel<br>• Featured movies<br>• Quick navigation<br>• Search bar |
-| **Movie Details** | `moviedetails.png` | Comprehensive movie information page | • Cast & crew<br>• Trailers<br>• Similar recommendations<br>• Rating & reviews |
-| **Watchlist** | `watchlist.png` | Personal collection management | • Add/remove movies<br>• Organized lists<br>• Progress tracking<br>• Custom categories |
-| **Smart Recommendations** | `recomendationspage.png` | AI-powered suggestions with filtering | • Advanced filters<br>• Personalized picks<br>• Mood-based selection<br>• Discovery engine |
-| **Interactive Quiz** | `gamepage.png` | AI-generated movie guessing game | • Real-time questions<br>• Score tracking<br>• Educational hints<br>• Multiplayer ready |
-| **Trending Movies** | `trending movies.png` | Weekly updated hot picks | • Trending algorithm<br>• Category filters<br>• Community ratings<br>• Time-based charts |
-
-</details>
 
 ---
 
 ## 🔗 Direct Links to Full Screenshots
 
 For quick access to the full-resolution images:
-1. **[Home Page](Screenshots/home page.png)** - Interactive Hero Carousel
+1. **[Home Page](Screenshots/homepage.png)** - Interactive Hero Carousel
 2. **[Movie Details](Screenshots/moviedetails.png)** - Comprehensive Information
 3. **[Watchlist](Screenshots/watchlist.png)** - Personal Collection
 4. **[Smart Recommendations](Screenshots/recomendationspage.png)** - Advanced Filtering
 5. **[Interactive Quiz](Screenshots/gamepage.png)** - AI-Generated Questions
-6. **[Trending Movies](Screenshots/trending movies.png)** - Weekly Hot Picks
+6. **[Trending Movies](Screenshots/trendingmovies.png)** - Weekly Hot Picks
 
 </div>
 
