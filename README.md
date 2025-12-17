@@ -159,7 +159,6 @@ For quick access to the full-resolution images:
 
 - **Node.js** 18+ or **Bun** 1.0+
 - **TMDB API Key** ([Get one here](https://www.themoviedb.org/settings/api))
-- **Google Gemini API Key** ([Get one here](https://ai.google.dev/))
 
 ### Installation
 
@@ -183,7 +182,6 @@ For quick access to the full-resolution images:
    Create a `.env.local` file in the root directory:
    ```env
    VITE_TMDB_API_KEY=your_tmdb_api_key_here
-   VITE_GEMINI_API_KEY=your_gemini_api_key_here
    ```
 
 4. **Start the development server**
@@ -219,7 +217,6 @@ For quick access to the full-resolution images:
 
 ### APIs & Services
 - **TMDB API** - Movie & TV data
-- **Google Gemini AI** - Natural language search
 - **Ko-fi** - Donation platform
 
 ---
@@ -270,7 +267,7 @@ watchly-ai/
 │   └── WatchlistContext.tsx # Watchlist state
 ├── services/                # API services
 │   ├── tmdbService.ts       # TMDB API integration
-│   └── geminiService.ts     # Gemini AI integration
+│   └── movieService.ts     # Gemini AI integration
 ├── lib/                     # Utilities
 │   └── utils.ts             # Slug helpers, cn()
 ├── types/                   # TypeScript types
@@ -461,7 +458,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ### APIs & Services
 - [TMDB](https://www.themoviedb.org/) - Movie database & images
-- [Google Gemini](https://ai.google.dev/) - AI-powered search
 - [Ko-fi](https://ko-fi.com/) - Donation platform
 
 ### Libraries & Tools
