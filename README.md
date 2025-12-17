@@ -500,7 +500,7 @@ If you find Watchly useful, consider:
 
 <div align="center">
 
-**Built with ❤️ using React, TypeScript, Tailwind CSS, TMDB API, and Google Gemini AI**
+**Built with ❤️ using React, TypeScript, Tailwind CSS and TMDB API**
 
 ⭐ Star this repo if you like it! ⭐
 
