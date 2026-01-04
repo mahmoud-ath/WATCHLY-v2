@@ -1,19 +1,46 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Film, Home, Bookmark, Gamepad2, Sparkles, Coffee, Share2, Palette, Check, Menu, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Film, Home, Bookmark, Gamepad2, Sparkles, Coffee, Share2, Palette, Check, Menu, X, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTheme } from '../../contexts/ThemeContext';
 import { ColorTheme } from '../../types/theme';
+import { searchMulti } from '../../services/tmdbService';
+import { createMovieSlug } from '../../lib/utils';
+import { LoadingState } from '../../types';
+
+// Debounce utility
+const useDebounce = (value: string, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { colorTheme, setColorTheme, themeClasses } = useTheme();
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [searchStatus, setSearchStatus] = useState<LoadingState>(LoadingState.IDLE);
   const themeMenuRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const isActive = (path: string) => location.pathname === path;
+
+  // Debounce search query
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -23,6 +50,9 @@ const Header: React.FC = () => {
       }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
         setShowMobileMenu(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSearchResults(false);
       }
     };
 
@@ -35,6 +65,30 @@ const Header: React.FC = () => {
     setShowMobileMenu(false);
   }, [location.pathname]);
 
+  // Debounced search effect
+  useEffect(() => {
+    if (!debouncedSearchQuery.trim()) {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    const performSearch = async () => {
+      setSearchStatus(LoadingState.LOADING);
+      try {
+        const results = await searchMulti(debouncedSearchQuery);
+        setSearchResults(results);
+        setShowSearchResults(true);
+        setSearchStatus(LoadingState.SUCCESS);
+      } catch (error) {
+        console.error('Search error:', error);
+        setSearchStatus(LoadingState.ERROR);
+      }
+    };
+
+    performSearch();
+  }, [debouncedSearchQuery]);
+
   const themes: { value: ColorTheme; label: string; color: string; textColor: string }[] = [
     { value: 'purple', label: 'Purple', color: 'bg-indigo-600', textColor: 'text-indigo-400' },
     { value: 'green', label: 'Green', color: 'bg-emerald-600', textColor: 'text-emerald-400' },
@@ -45,6 +99,31 @@ const Header: React.FC = () => {
     setColorTheme(theme);
     setShowThemeMenu(false);
     toast.success(`Switched to ${theme.charAt(0).toUpperCase() + theme.slice(1)} theme`);
+  };
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) {
+      toast.error('Please enter a search query');
+      return;
+    }
+
+    // If there are results, navigate to the first one (or keep showing results)
+    if (searchResults.length > 0) {
+      handleSearchResultClick(searchResults[0]);
+    }
+  };
+
+  const handleSearchResultClick = (result: any) => {
+    const isTV = result.media_type === 'tv';
+    const title = isTV ? result.name : result.title;
+    const slug = createMovieSlug(title, result.id);
+    const route = isTV ? `/tv/${slug}` : `/movie/${slug}`;
+    
+    navigate(route);
+    setSearchQuery('');
+    setShowSearchResults(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -72,6 +151,62 @@ const Header: React.FC = () => {
             <Home className="w-4 h-4" />
             <span>Home</span>
           </Link>
+          
+          {/* Search Bar */}
+          <div className="relative" ref={searchRef}>
+            <form onSubmit={handleSearch} className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-slate-500 group-focus-within:text-slate-400 transition-colors" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search movies or TV..."
+                className="pl-10 pr-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all w-64"
+              />
+            </form>
+
+            {/* Search Results Dropdown */}
+            {showSearchResults && searchResults.length > 0 && (
+              <div className="absolute top-full left-0 mt-2 w-96 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-50 max-h-96 overflow-y-auto">
+                {searchResults.slice(0, 8).map((result) => (
+                  <button
+                    key={`${result.media_type}-${result.id}`}
+                    onClick={() => handleSearchResultClick(result)}
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-800/50 transition-colors text-left border-b border-slate-800/50 last:border-b-0"
+                  >
+                    {result.poster_path ? (
+                      <img
+                        src={`https://image.tmdb.org/t/p/w92${result.poster_path}`}
+                        alt={result.title || result.name}
+                        className="w-10 h-14 object-cover rounded"
+                      />
+                    ) : (
+                      <div className="w-10 h-14 bg-slate-700 rounded flex items-center justify-center">
+                        <Film className="w-5 h-5 text-slate-500" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-white truncate">
+                        {result.title || result.name}
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        {result.media_type === 'tv' ? 'TV Series' : 'Movie'} • {new Date(result.release_date || result.first_air_date || '').getFullYear() || 'N/A'}
+                      </p>
+                    </div>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      result.media_type === 'tv' 
+                        ? 'bg-blue-500/20 text-blue-400' 
+                        : 'bg-purple-500/20 text-purple-400'
+                    }`}>
+                      {result.media_type === 'tv' ? 'TV' : 'Movie'}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           
           <Link 
             to="/recommendations" 

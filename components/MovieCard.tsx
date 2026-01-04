@@ -30,8 +30,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
       onClick(movie);
     } else {
       // Navigate to details page with slug
-      const slug = createMovieSlug(movie.title, parseInt(movie.id));
-      navigate(`/movie/${slug}`);
+      const isTV = movie.id.startsWith('tv-');
+      const numericId = isTV ? movie.id.replace('tv-', '') : movie.id;
+      const slug = createMovieSlug(movie.title, parseInt(numericId));
+      const route = isTV ? `/tv/${slug}` : `/movie/${slug}`;
+      navigate(route);
     }
   };
   

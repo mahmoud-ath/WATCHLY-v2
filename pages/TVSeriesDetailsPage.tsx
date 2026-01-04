@@ -3,10 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useWatchlist } from '../contexts/WatchlistContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { fetchMovieDetails } from '../services/tmdbService';
+import { fetchTVDetails } from '../services/tmdbService';
 import { extractIdFromSlug, createMovieSlug } from '../lib/utils';
 import { LoadingState } from '../types';
-import { Film } from 'lucide-react';
+import { Tv } from 'lucide-react';
 import { HeroSection } from '../components/movieDetails/HeroSection';
 import { SynopsisSection } from '../components/movieDetails/SynopsisSection';
 import { CastCrewCard } from '../components/movieDetails/CastCrewCard';
@@ -16,7 +16,7 @@ import { WatchOptions } from '../components/movieDetails/WatchOptions';
 import { SimilarMoviesGrid } from '../components/movieDetails/SimilarMoviesGrid';
 import { TrailerModal } from '../components/movieDetails/TrailerModal';
 
-interface MovieDetails {
+interface TVSeriesDetails {
   id: number;
   title: string;
   year: number;
@@ -36,7 +36,10 @@ interface MovieDetails {
   similar: any[];
   watchProviders: any;
   productionCompanies: { name: string; logo_path: string | null }[];
-  mediaType: 'movie';
+  mediaType: 'tv';
+  numberOfSeasons: number;
+  numberOfEpisodes: number;
+  episodeRuntime: string;
 }
 
 const getPosterUrl = (path: string, size = 'w500') => {
@@ -47,12 +50,12 @@ const getBackdropUrl = (path: string, size = 'original') => {
   return path ? `https://image.tmdb.org/t/p/${size}${path}` : '/placeholder-backdrop.jpg';
 };
 
-const MovieDetailsPage: React.FC = () => {
+const TVSeriesDetailsPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { isInWatchlist, toggleWatchlist } = useWatchlist();
   const { themeClasses } = useTheme();
-  const [details, setDetails] = useState<MovieDetails | null>(null);
+  const [details, setDetails] = useState<TVSeriesDetails | null>(null);
   const [status, setStatus] = useState<LoadingState>(LoadingState.IDLE);
   const [playingTrailer, setPlayingTrailer] = useState(false);
 
@@ -64,14 +67,14 @@ const MovieDetailsPage: React.FC = () => {
       navigate('/404', { replace: true });
       return;
     }
-    loadMovieDetails(id);
+    loadTVSeriesDetails(id);
   }, [id, navigate]);
 
   const handleToggleWatchlist = () => {
     if (!details || !id) return;
     
     toggleWatchlist({
-      id: id,
+      id: `tv-${id}`,
       title: details.title,
       posterUrl: details.posterUrl,
       rating: details.rating,
@@ -81,38 +84,42 @@ const MovieDetailsPage: React.FC = () => {
     });
   };
 
-  const loadMovieDetails = async (movieId: string) => {
+  const loadTVSeriesDetails = async (tvId: string) => {
     setStatus(LoadingState.LOADING);
     try {
-      const numericId = parseInt(movieId);
+      const numericId = parseInt(tvId);
 
-      const data = await fetchMovieDetails(numericId);
-      const director = data.credits.crew.find(c => c.job === 'Director')?.name || 'Unknown';
+      const data = await fetchTVDetails(numericId);
       setDetails({
         id: numericId,
-        title: data.details.title,
-        year: new Date(data.details.release_date).getFullYear(),
+        title: data.details.name,
+        year: new Date(data.details.first_air_date).getFullYear(),
         rating: Math.round(data.details.vote_average * 10) / 10,
         overview: data.details.overview,
-        runtime: data.details.runtime ? `${Math.floor(data.details.runtime / 60)}h ${data.details.runtime % 60}m` : 'N/A',
+        runtime: data.details.episode_run_time.length > 0 ? `${data.details.episode_run_time[0]}m per episode` : 'N/A',
         genres: data.details.genres.map(g => g.name),
-        director,
+        director: data.details.created_by && data.details.created_by.length > 0 
+          ? data.details.created_by.map(c => c.name).join(', ') 
+          : 'Unknown',
         cast: data.credits.cast.slice(0, 10).map(c => c.name),
-        releaseDate: data.details.release_date,
-        budget: data.details.budget ? `$${(data.details.budget / 1000000).toFixed(1)}M` : 'N/A',
-        revenue: data.details.revenue ? `$${(data.details.revenue / 1000000).toFixed(1)}M` : 'N/A',
-        status: data.details.status,
+        releaseDate: data.details.first_air_date,
+        budget: 'N/A',
+        revenue: 'N/A',
+        status: data.details.status || 'Series',
         posterUrl: getPosterUrl(data.details.poster_path, 'original'),
         backdropUrl: getBackdropUrl(data.details.backdrop_path, 'original'),
         trailers: data.videos,
         similar: data.similar,
         watchProviders: data.watchProviders,
-        productionCompanies: data.details.production_companies,
-        mediaType: 'movie',
+        productionCompanies: data.details.production_companies || [],
+        mediaType: 'tv',
+        numberOfSeasons: data.details.number_of_seasons || 0,
+        numberOfEpisodes: data.details.number_of_episodes || 0,
+        episodeRuntime: data.details.episode_run_time.length > 0 ? `${data.details.episode_run_time[0]}m` : 'N/A',
       });
       setStatus(LoadingState.SUCCESS);
     } catch (error) {
-      console.error('Error loading movie details:', error);
+      console.error('Error loading TV series details:', error);
       setStatus(LoadingState.ERROR);
     }
   };
@@ -121,16 +128,16 @@ const MovieDetailsPage: React.FC = () => {
     navigate(-1);
   };
 
-  const handleSimilarClick = (movieId: number, mediaType: string, title: string) => {
-    const slug = createMovieSlug(title, movieId);
-    navigate(`/movie/${slug}`);
+  const handleSimilarClick = (tvId: number, mediaType: string, title: string) => {
+    const slug = createMovieSlug(title, tvId);
+    navigate(`/tv/${slug}`);
     window.scrollTo(0, 0);
   };
 
   const handleShare = () => {
     if (details) {
       const slug = createMovieSlug(details.title, details.id);
-      const url = `${window.location.origin}/movie/${slug}`;
+      const url = `${window.location.origin}/tv/${slug}`;
       navigator.clipboard.writeText(url);
       toast.success('Link copied to clipboard!');
     }
@@ -141,7 +148,7 @@ const MovieDetailsPage: React.FC = () => {
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className={`animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 ${themeClasses.border.replace('border-', 'border-t-2 border-b-2 border-')} mx-auto mb-4`}></div>
-          <p className="text-slate-400 text-lg">Loading movie details...</p>
+          <p className="text-slate-400 text-lg">Loading TV series details...</p>
         </div>
       </div>
     );
@@ -152,9 +159,9 @@ const MovieDetailsPage: React.FC = () => {
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="w-20 h-20 bg-rose-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Film className="w-10 h-10 text-rose-500" />
+            <Tv className="w-10 h-10 text-rose-500" />
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Failed to load movie details</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">Failed to load TV series details</h3>
           <p className="text-slate-400 mb-6">Please check your connection and try again.</p>
           <div className="flex gap-3 justify-center">
             <button
@@ -177,7 +184,7 @@ const MovieDetailsPage: React.FC = () => {
 
   const mainTrailer = details.trailers.find(t => t.type === 'Trailer') || details.trailers[0];
   const usProviders = details.watchProviders?.US;
-  const movieIsInWatchlist = id ? isInWatchlist(id) : false;
+  const tvIsInWatchlist = id ? isInWatchlist(`tv-${id}`) : false;
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -192,7 +199,7 @@ const MovieDetailsPage: React.FC = () => {
         genres={details.genres}
         mediaType={details.mediaType}
         status={details.status}
-        isInWatchlist={movieIsInWatchlist}
+        isInWatchlist={tvIsInWatchlist}
         mainTrailer={mainTrailer}
         onBack={handleBack}
         onToggleWatchlist={handleToggleWatchlist}
@@ -207,6 +214,26 @@ const MovieDetailsPage: React.FC = () => {
           <div className="p-4 md:p-8 space-y-8 md:space-y-12">
             {/* Synopsis */}
             <SynopsisSection overview={details.overview} />
+
+            {/* TV Series Stats */}
+            <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-slate-800/30 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                <p className="text-slate-400 text-sm mb-1">Seasons</p>
+                <p className="text-2xl font-bold text-white">{details.numberOfSeasons}</p>
+              </div>
+              <div className="bg-slate-800/30 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                <p className="text-slate-400 text-sm mb-1">Episodes</p>
+                <p className="text-2xl font-bold text-white">{details.numberOfEpisodes}</p>
+              </div>
+              <div className="bg-slate-800/30 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                <p className="text-slate-400 text-sm mb-1">Episode Length</p>
+                <p className="text-2xl font-bold text-white">{details.episodeRuntime}</p>
+              </div>
+              <div className="bg-slate-800/30 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                <p className="text-slate-400 text-sm mb-1">Status</p>
+                <p className="text-lg font-bold text-emerald-400">{details.status}</p>
+              </div>
+            </section>
 
             {/* Details Grid */}
             <section>
@@ -229,7 +256,7 @@ const MovieDetailsPage: React.FC = () => {
             {/* Watch Options */}
             <WatchOptions watchProviders={usProviders} />
 
-            {/* Similar Movies/Shows */}
+            {/* Similar TV Series */}
             <SimilarMoviesGrid
               similar={details.similar}
               mediaType={details.mediaType}
@@ -249,4 +276,4 @@ const MovieDetailsPage: React.FC = () => {
   );
 };
 
-export default MovieDetailsPage;
+export default TVSeriesDetailsPage;

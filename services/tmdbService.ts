@@ -60,6 +60,11 @@ interface TMDBTVDetails {
   poster_path: string | null;
   backdrop_path: string | null;
   tagline: string;
+  status?: string;
+  number_of_seasons?: number;
+  number_of_episodes?: number;
+  production_companies?: { id: number; name: string; logo_path: string | null }[];
+  created_by?: Array<{ id: number; name: string }>;
 }
 
 export interface TMDBCredits {

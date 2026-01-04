@@ -11,6 +11,7 @@ import TopRatedMoviesPage from './pages/TopRatedMoviesPage';
 import TopRatedTVPage from './pages/TopRatedTVPage';
 import UpcomingMoviesPage from './pages/UpcomingMoviesPage';
 import MovieDetailsPage from './pages/MovieDetailsPage';
+import TVSeriesDetailsPage from './pages/TVSeriesDetailsPage';
 import WatchlistPage from './pages/WatchlistPage';
 import PlayGamePage from './pages/PlayGamePage';
 import RecommendationsPage from './pages/RecommendationsPage';
@@ -51,6 +52,7 @@ function App() {
             <Route path="/upcoming-movies" element={<UpcomingMoviesPage />} />
             <Route path="/recommendations" element={<RecommendationsPage />} />
             <Route path="/movie/:slug" element={<MovieDetailsPage />} />
+            <Route path="/tv/:slug" element={<TVSeriesDetailsPage />} />
             <Route path="/watchlist" element={<WatchlistPage />} />
             <Route path="/play-game" element={<PlayGamePage />} />
             <Route path="/about" element={<AboutPage />} />
